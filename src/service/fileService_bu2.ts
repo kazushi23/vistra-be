@@ -64,8 +64,44 @@ class FileService extends BaseService<Document> {
         return fileMetaData;
     }
 
+    async handleDuplicate(files: FileMetaDataDto[]): Promise<FileMetaDataDto[]> {
+        if (!files || files.length === 0) {
+            throw new HttpError("No files provided for duplicate check.", 400);
+        }
+        
+        const fileNames = files.map(d => d.name);
+        const allFiles = await this.getFilesByNames(fileNames);
+
+        const nameCountMap = new Map<string, number>();
+        for (const af of allFiles) {
+            if (af.baseName) {
+                const key: string = af.baseName;
+                nameCountMap.set(key, (nameCountMap.get(key) || 0) + 1);
+            }
+        }
+
+        files.forEach(f => {
+                const existingCount = nameCountMap.get(f.name) || 0;
+                if (existingCount > 0) {
+                    const extensionIndex = f.name.lastIndexOf(".");
+                    if (extensionIndex === -1) {
+                        f.name = `${f.name}(${existingCount})`;
+                    } else {
+                        const baseName = f.name.substring(0, extensionIndex);
+                        const ext = f.name.substring(extensionIndex);
+                        f.name = `${baseName}(${existingCount})${ext}`;
+                    }
+                }
+
+                // Increment map to handle duplicates in the same batch
+                nameCountMap.set(f.name, (nameCountMap.get(f.name) || 0) + 1);
+            });
+        return files;
+    }
+
     async processFiles(fileDto: FileDto): Promise<FileMetaDataDto[]> {
-        return await this.validateExtract(fileDto);
+        const metadatas = await this.validateExtract(fileDto);
+        return await this.handleDuplicate(metadatas);
     }
 
     async createFiles(files: FileDto): Promise<CreateFileResponse> {

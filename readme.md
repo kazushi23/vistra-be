@@ -8,6 +8,13 @@ Limit 10 files per upload? & duplicate check for db + array needed, or db only?
 transaction locking for duplicates
 error message between frontend and backend
 optimising fileservice, are logic where it is suppose to be?
+testscript high traffic insert to test duplication
+
+removed unique for folder and file => keep it simple first and submit
+no unique constraints for name and TODO remove basename
+file(x) all in bu
+
+dont need user table, just a static string first as not requested in assignment
 
 # CONSIDERATIONS:
 ## DB
@@ -38,3 +45,6 @@ url?: string;
 ```
 
 Everything is not multi-tenant or partitioned by user/company. All implementation is based on single assumption that all users are attached to same instance of database.
+
+unique constraint {Name} on document db when type == folder
+for file, can have duplicate, but file will add (1) ... (x)
