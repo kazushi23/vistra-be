@@ -6,36 +6,33 @@ import type { CreateFolderResponse } from "../types/dto/document.js";
 import { HttpError } from "../types/httpError.js";
 
 class FolderService extends BaseService<Document> {
-
     constructor() {
         const documentRepository = AppDataSource.getRepository(Document);
         super(documentRepository);
     }
 
-    async getFoldersByName(name: string): Promise<Document[]> {
-        return await this.getAllFiltered({filters: {"name": name, "type": "folder"}});
-    }
-
     async createFolder(folder: FolderDto): Promise<CreateFolderResponse> {
-        const existingFolder: Document[] = await this.getFoldersByName(folder.name)
-        if (existingFolder.length > 0) {
-            throw new HttpError("Duplicate folder name detected", 400);
+        try {
+            const document = new Document();
+            document.name = folder.name;
+            document.type = "folder";
+            document.createdBy = "Kazushi Fujiwara";
+
+            const created = await this.repository.save(document); // single atomic operation
+
+            return {
+                success: true,
+                message: "Folder created successfully",
+                data: toDocumentDto(created),
+            };
+        } catch (error: any) {
+            // unique constraint violation
+            if (error.code === "ER_DUP_ENTRY" || error.errno === 1062) {
+                throw new HttpError("Duplicate folder name detected", 400);
+            }
+            throw error;
         }
-        
-        const document = new Document();
-        document.name = folder.name;
-        document.type = "folder";
-        document.createdBy = "Kazushi Fujiwara";
-
-        const created: Document = await this.createOne(document);
-
-        return {
-            success: true,
-            message: "Folder created successfully",
-            data: toDocumentDto(created),
-        };
     }
 }
 
 export const folderService = new FolderService();
-

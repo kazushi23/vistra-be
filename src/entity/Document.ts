@@ -1,5 +1,6 @@
-import {Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from "typeorm";
+import {Entity, Index, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from "typeorm";
 
+@Index("unique_folder_name", ["name"], { unique: true, where: "type = 'folder'" })
 @Entity()
 export class Document {
     @PrimaryGeneratedColumn()
