@@ -2,22 +2,22 @@ import {Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } fro
 
 @Entity()
 export class Document {
-  @PrimaryGeneratedColumn()
-  id!: number;
+    @PrimaryGeneratedColumn()
+    id!: number;
 
-  @Column({ type: "varchar", length: 255 })
-  name!: string;
+    @Column({ type: "varchar", length: 255 })
+    name!: string;
 
-  @Column({ type: "enum", enum: ["file", "folder"] })
-  type!: "file" | "folder";
+    @Column({ type: "enum", enum: ["file", "folder"] })
+    type!: "file" | "folder";
 
-  @Column({ type: "bigint", nullable: true })
-  size?: number; // only for files (bytes)
+    @Column({ type: "bigint", nullable: true })
+    size?: number; // only for files (bytes)
 
-  @Column({ type: "varchar", length: 100 })
-  createdBy!: string;
+    @Column({ type: "varchar", length: 100 })
+    createdBy!: string;
 
-@Column({ type: "bigint" })
+    @Column({ type: "bigint" })
     createdAt!: number;
 
     @Column({ type: "bigint" })
