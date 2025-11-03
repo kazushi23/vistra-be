@@ -2,6 +2,7 @@ import express from "express";
 import type { Express, Request, Response } from "express";
 import cors from "cors";
 import config from "./config/config.js";
+import router from "./routes/index.js";
 
 const app: Express = express();
 const port: number = Number(config) || 5001;
@@ -24,6 +25,7 @@ app.use(
         optionsSuccessStatus: 204,
     })
 )
+app.use(router);
 
 app.get("/test", (req: Request, res: Response) => {
   res.send("This is a test route");
