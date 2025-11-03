@@ -1,0 +1,37 @@
+import RequestHandler from "../utils/RequestHandler.js";
+import type { Request, Response } from "express";
+import { documentService } from "../service/documentService.js";
+
+const requestHandler = new RequestHandler()
+
+export class DocumentController {
+    static async getAllDocuments(req: Request, res: Response) {
+        try {
+            // Parse and validate query parameters
+            const page = parseInt(req.query.page as string, 10);
+            if (isNaN(page) || page < 1) {
+                return requestHandler.sendError(res, "Invalid page number", 400);
+            }
+
+            const pageSize = parseInt(req.query.pagesize as string, 10);
+            if (isNaN(pageSize) || pageSize < 1) {
+                return requestHandler.sendError(res, "Invalid page size", 400);
+            }
+
+            const descending = req.query.descending !== undefined ? req.query.descending === "true" : true;
+            const sortBy = (req.query.sortColumn as string) || "updatedAt";
+            const search = (req.query.search as string) || "";
+            const offset = (page - 1) * pageSize;
+
+            // Call the service
+            const result = await documentService.getAllDocuments({page, pageSize, offset, descending, sortBy, search});
+
+            // Send clean response with single-level data
+            return requestHandler.sendSuccess(res, "Data has been retrieved", result.total)(result.data);
+
+        } catch (error) {
+            console.error("Error fetching documents:", error);
+            return requestHandler.sendError(res, "Internal server error", 500);
+        }
+    }
+}
