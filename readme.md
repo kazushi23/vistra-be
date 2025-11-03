@@ -1,4 +1,9 @@
-
+# TODO:
+Logging
+Validation - Folder unique / File repeated _(x)
+Type enforcing
+comments
+caching?
 
 # CONSIDERATIONS:
 ## DB

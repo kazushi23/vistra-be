@@ -1,9 +1,7 @@
 import RequestHandler from "../utils/RequestHandler.js";
 import type { NextFunction, Request, Response } from "express";
 import { documentService } from "../service/documentService.js";
-import type { FolderDto } from "../types/dto/document.dto.js";
-
-const requestHandler = new RequestHandler()
+import type { FolderDto, FileDto } from "../types/dto/document.dto.js";
 
 export class DocumentController {
     static async getAllDocuments(req: Request, res: Response, next: NextFunction) {
@@ -11,12 +9,12 @@ export class DocumentController {
             // Parse and validate query parameters
             const page = parseInt(req.query.page as string, 10);
             if (isNaN(page) || page < 1) {
-                return requestHandler.sendError(res, "Invalid page number", 400);
+                return RequestHandler.sendError(res, "Invalid page number", 400);
             }
 
             const pageSize = parseInt(req.query.pagesize as string, 10);
             if (isNaN(pageSize) || pageSize < 1) {
-                return requestHandler.sendError(res, "Invalid page size", 400);
+                return RequestHandler.sendError(res, "Invalid page size", 400);
             }
 
             const descending = req.query.descending !== undefined ? req.query.descending === "true" : true;
@@ -28,7 +26,7 @@ export class DocumentController {
             const result = await documentService.getAllDocuments({page, pageSize, offset, descending, sortBy, search});
 
             // Send clean response with single-level data
-            return requestHandler.sendSuccess(res, "Data has been retrieved", result.total)(result.data);
+            return RequestHandler.sendSuccess(res, "Data has been retrieved", result.total)(result.data);
 
         } catch (error) {
             next(error)
@@ -39,17 +37,37 @@ export class DocumentController {
         try {
             const name = req.body as FolderDto;
             if (!name) {
-                return requestHandler.sendError(res, "Folder name is required", 400);
+                return RequestHandler.sendError(res, "Folder name is required", 400);
             }
             const result = await documentService.createFolder(name);
 
             if (!result.success) {
-                return requestHandler.sendError(res, result.message);
+                return RequestHandler.sendError(res, result.message);
             }
 
-            return requestHandler.sendSuccess(res, result.message)({ data: result.data });
+            return RequestHandler.sendSuccess(res, result.message)({ data: result.data });
         } catch (error) {
             next(error)
+        }
+    }
+
+    static async createFile(req: Request, res: Response, next: NextFunction) {
+        try {
+            const files = req.files as Express.Multer.File[];
+
+            if (!Array.isArray(files) || files.length === 0) {
+                return RequestHandler.sendError(res, "Files array is required.", 400);
+            }
+            const fileDto: FileDto = { files };
+            const result = await documentService.createFiles(fileDto);
+
+            if (!result.success) {
+                return RequestHandler.sendError(res, result.message, 400);
+            }
+
+            return RequestHandler.sendSuccess(res, result.message, 201)(result.data);
+        } catch (error) {
+            next(error);
         }
     }
 }
