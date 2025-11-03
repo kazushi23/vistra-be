@@ -3,6 +3,7 @@ import { AppDataSource } from "../data-source.js";
 import { Document } from "../entity/Document.js";
 import { type FolderDto, toDocumentDto } from "../types/dto/document.dto.js";
 import type { CreateFolderResponse } from "../types/dto/document.js";
+import { HttpError } from "../types/httpError.js";
 
 class FolderService extends BaseService<Document> {
 
@@ -18,7 +19,7 @@ class FolderService extends BaseService<Document> {
     async createFolder(folder: FolderDto): Promise<CreateFolderResponse> {
         const existingFolder: Document[] = await this.getFoldersByName(folder.name)
         if (existingFolder.length > 0) {
-            throw new Error("Duplicate folder name detected");
+            throw new HttpError("Duplicate folder name detected", 400);
         }
         
         const document = new Document();

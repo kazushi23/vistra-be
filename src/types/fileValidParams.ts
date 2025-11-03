@@ -19,7 +19,9 @@ export const ALLOWED_FILE_TYPES: string[] = [
     // Archives
     "application/zip",
     "application/x-7z-compressed",
-] as const;
+];
 
 
 export const ALLOWED_FILE_SIZE_MB = 5;
+
+export const ALLOWED_FILE_LENGTH = 10;

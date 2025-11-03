@@ -5,6 +5,7 @@ import { Document } from "../entity/Document.js";
 import type { CreateFileResponse } from "../types/dto/document.js";
 import { toDocumentDto } from "../types/dto/document.dto.js";
 import { ALLOWED_FILE_TYPES, ALLOWED_FILE_SIZE_MB } from "../types/fileValidParams.js";
+import { HttpError } from "../types/httpError.js";
 
 // currently fileservice is stateless, not request specific/user-specific, not multi-tenant, so 1 instance is sufficient
 class FileService extends BaseService<Document> {
@@ -27,33 +28,34 @@ class FileService extends BaseService<Document> {
 
     async validateExtract(fileDto: FileDto): Promise<FileMetaDataDto[]> {
         if (!fileDto?.files || fileDto.files.length === 0) {
-            throw new Error("No files provided for validation.");
+            throw new HttpError("No files provided for validation.", 400);
         }
         const fileMetaData: FileMetaDataDto[] = []
 
         for (const file of fileDto.files) {
-            if (!file) throw new Error("File is missing or undefined.");
+            if (!file) throw new HttpError("File is missing or undefined.", 400);
 
             // 1️⃣ File type validation
             if (!this.ALLOWED_TYPES.includes(file.mimetype)) {
-                throw new Error(`Invalid file type: ${file.originalname} (${file.mimetype})`);
+                throw new HttpError(`Invalid file type: ${file.originalname} (${file.mimetype})`, 400);
             }
 
             // 2️⃣ File size validation (convert bytes → MB)
             if (file.size  > this.MAX_FILE_SIZE) {
-                throw new Error(
-                `File "${file.originalname}" exceeds the maximum size of ${this.MAX_FILE_SIZE_MB}MB`
+                throw new HttpError(
+                `File "${file.originalname}" exceeds the maximum size of ${this.MAX_FILE_SIZE_MB}MB`,
+                400
                 );
             }
 
             // 3️⃣ Empty file check
             if (file.size === 0) {
-                throw new Error(`File "${file.originalname}" is empty.`);
+                throw new HttpError(`File "${file.originalname}" is empty.`, 400);
             }
 
             // 4️⃣ File name pattern check
             if (!/^[a-zA-Z0-9._\-\s]+$/.test(file.originalname)) {
-                throw new Error(`File name "${file.originalname}" contains invalid characters.`);
+                throw new HttpError(`File name "${file.originalname}" contains invalid characters.`, 400);
             }
 
             fileMetaData.push({
@@ -67,6 +69,10 @@ class FileService extends BaseService<Document> {
     }
 
     async handleDuplicate(files: FileMetaDataDto[]): Promise<FileMetaDataDto[]> {
+        if (!files || files.length === 0) {
+            throw new HttpError("No files provided for duplicate check.", 400);
+        }
+        
         const fileNames = files.map(d => d.name);
         const allFiles = await this.getFilesByNames(fileNames);
 
