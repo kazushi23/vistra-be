@@ -1,9 +1,9 @@
 import express from "express";
 import { DocumentController } from "../../controllers/documentController.js";
+import { FolderController } from "../../controllers/folderController.js";
 
 const router = express.Router();
 
-router.get("/", DocumentController.getAllDocuments);// view a list of documents and folders
-
+router.post("/create", FolderController.createFolder); // create folder
 
 export default router

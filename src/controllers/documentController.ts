@@ -1,7 +1,6 @@
 import RequestHandler from "../utils/RequestHandler.js";
 import type { NextFunction, Request, Response } from "express";
 import { documentService } from "../service/documentService.js";
-import type { FolderDto, FileDto } from "../types/dto/document.dto.js";
 
 export class DocumentController {
     static async getAllDocuments(req: Request, res: Response, next: NextFunction) {
@@ -30,44 +29,6 @@ export class DocumentController {
 
         } catch (error) {
             next(error)
-        }
-    }
-
-    static async createFolder(req: Request, res: Response, next: NextFunction) {
-        try {
-            const name = req.body as FolderDto;
-            if (!name) {
-                return RequestHandler.sendError(res, "Folder name is required", 400);
-            }
-            const result = await documentService.createFolder(name);
-
-            if (!result.success) {
-                return RequestHandler.sendError(res, result.message);
-            }
-
-            return RequestHandler.sendSuccess(res, result.message)({ data: result.data });
-        } catch (error) {
-            next(error)
-        }
-    }
-
-    static async createFile(req: Request, res: Response, next: NextFunction) {
-        try {
-            const files = req.files as Express.Multer.File[];
-
-            if (!Array.isArray(files) || files.length === 0) {
-                return RequestHandler.sendError(res, "Files array is required.", 400);
-            }
-            const fileDto: FileDto = { files };
-            const result = await documentService.createFiles(fileDto);
-
-            if (!result.success) {
-                return RequestHandler.sendError(res, result.message, 400);
-            }
-
-            return RequestHandler.sendSuccess(res, result.message, 201)(result.data);
-        } catch (error) {
-            next(error);
         }
     }
 }

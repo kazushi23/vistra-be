@@ -8,6 +8,9 @@ export class Document {
     @Column({ type: "varchar", length: 255 })
     name!: string;
 
+    @Column({ type: "varchar", length: 255, nullable: true  })
+    baseName?: string;
+
     @Column({ type: "enum", enum: ["file", "folder"] })
     type!: "file" | "folder";
 

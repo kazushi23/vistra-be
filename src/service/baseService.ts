@@ -30,7 +30,7 @@ export abstract class BaseService<T extends ObjectLiteral> {
         }
     }
     // get all data with pagination, sorting, filtering and searching
-    async getAll(options: GetAllQueryOptions = {}) {
+    async getAllPagination(options: GetAllQueryOptions = {}): Promise<{data: T[]; total: number;}> {
         const page = options.page && options.page > 0 ? options.page : 1;
         const pageSize = options.pageSize && options.pageSize > 0 ? options.pageSize : this.defaultLimit;
         const offset = (page - 1) * pageSize;
@@ -74,5 +74,26 @@ export abstract class BaseService<T extends ObjectLiteral> {
             data,
             total
         };
+    }
+
+    async getAllFiltered(options: GetAllQueryOptions = {}): Promise<T[]> {
+        // t alias for the table
+        const qb = this.repository.createQueryBuilder("t");
+
+        // Apply filters
+        if (options.filters) {
+            Object.entries(options.filters).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+                qb.andWhere(`t.${key} IN (:...${key})`, { [key]: value });
+            } else if (value === null) {
+                qb.andWhere(`t.${key} IS NULL`);
+            } else {
+                qb.andWhere(`t.${key} = :${key}`, { [key]: value });
+            }
+            });
+        }
+
+        // Execute query
+        return await qb.getMany();
     }
 }

@@ -6,6 +6,7 @@ export interface FileDto {
 }
 
 export interface FileMetaDataDto {
+  basename: string;
   name: string;
   size: number;
 }

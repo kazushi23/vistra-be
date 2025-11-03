@@ -4,13 +4,21 @@ Validation - Folder unique / File repeated _(x)
 Type enforcing
 comments
 caching?
+Limit 10 files per upload? & duplicate check for db + array needed, or db only?
+transaction locking for duplicates
+error message between frontend and backend
+optimising fileservice, are logic where it is suppose to be?
 
 # CONSIDERATIONS:
 ## DB
 Single document table for easy query for document retrieval unified view
+
 If scaling needed, add on to document table with relationship
+
     eg. if permission table needed, add on and map to document
+
 Add on columns for self-referencing, if folders have sub folder and files belong to folder, we can add:
+
 ```javascript
 /*
 self-referencing where a document may belong to one parent folder
@@ -28,3 +36,5 @@ children!: Document[];
 @Column({ type: "varchar", length: 500, nullable: true })
 url?: string;
 ```
+
+Everything is not multi-tenant or partitioned by user/company. All implementation is based on single assumption that all users are attached to same instance of database.
