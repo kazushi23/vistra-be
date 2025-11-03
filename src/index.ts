@@ -3,6 +3,14 @@ import type { Express, Request, Response } from "express";
 import cors from "cors";
 import config from "./config/config.js";
 import router from "./routes/index.js";
+import { errorHandler } from "./middleware/errorHandler.js";
+import { AppDataSource } from "./data-source.js";
+
+try {
+    await AppDataSource.initialize()
+} catch (error) {
+    console.log(error)
+}
 
 const app: Express = express();
 const port: number = Number(config) || 5001;
@@ -27,9 +35,7 @@ app.use(
 )
 app.use(router);
 
-app.get("/test", (req: Request, res: Response) => {
-  res.send("This is a test route");
-});
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
