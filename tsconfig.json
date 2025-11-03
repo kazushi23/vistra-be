@@ -1,0 +1,43 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    /* === File Layout === */
+    "rootDir": "./src",        // Source TypeScript files
+    "outDir": "./dist",        // Compiled JavaScript output
+
+    /* === Environment Settings === */
+    "module": "nodenext",      // Proper Node.js ESM support
+    "moduleResolution": "nodenext",
+    "target": "ES2022",        // Modern Node features (e.g. async/await, import)
+    "lib": ["ES2022"],         // Include modern JS APIs
+    "types": ["node", "express", "multer"],         // Include Node.js types (for process, etc.)
+
+    /* === Output Settings === */
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    /* === TypeORM === */
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+
+    /* === Type Checking === */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    /* === Module Behavior === */
+    "esModuleInterop": true,   // Allow `import express from "express"`
+    "verbatimModuleSyntax": true, // Enforces `import type { … }` for types
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noUncheckedSideEffectImports": true,
+
+    /* === Quality of Life === */
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
