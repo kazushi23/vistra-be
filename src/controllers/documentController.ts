@@ -1,11 +1,12 @@
 import RequestHandler from "../utils/RequestHandler.js";
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { documentService } from "../service/documentService.js";
+import type { FolderDto } from "../types/dto/document.dto.js";
 
 const requestHandler = new RequestHandler()
 
 export class DocumentController {
-    static async getAllDocuments(req: Request, res: Response) {
+    static async getAllDocuments(req: Request, res: Response, next: NextFunction) {
         try {
             // Parse and validate query parameters
             const page = parseInt(req.query.page as string, 10);
@@ -30,8 +31,25 @@ export class DocumentController {
             return requestHandler.sendSuccess(res, "Data has been retrieved", result.total)(result.data);
 
         } catch (error) {
-            console.error("Error fetching documents:", error);
-            return requestHandler.sendError(res, "Internal server error", 500);
+            next(error)
+        }
+    }
+
+    static async createFolder(req: Request, res: Response, next: NextFunction) {
+        try {
+            const name = req.body as FolderDto;
+            if (!name) {
+                return requestHandler.sendError(res, "Folder name is required", 400);
+            }
+            const result = await documentService.createFolder(name);
+
+            if (!result.success) {
+                return requestHandler.sendError(res, result.message);
+            }
+
+            return requestHandler.sendSuccess(res, result.message)({ data: result.data });
+        } catch (error) {
+            next(error)
         }
     }
 }
