@@ -9,8 +9,8 @@ export class Document {
     @Column({ type: "varchar", length: 255 })
     name!: string; // name of file/folder
 
-    @Column({ type: "varchar", length: 255, nullable: true  })
-    baseName?: string; // for duplication check
+    // @Column({ type: "varchar", length: 255, nullable: true  })
+    // baseName?: string; // for duplication check
 
     @Column({ type: "enum", enum: ["file", "folder"] })
     type!: "file" | "folder"; // type of document {file | folder}

@@ -1,9 +1,9 @@
-import type { FileDto, FileMetaDataDto } from "../types/dto/document.dto.js";
+import type { FileDto, FileMetaDataDto } from "../types/dto/document/document.dto.js";
 import { BaseService } from "./baseService.js";
 import { AppDataSource } from "../data-source.js";
 import { Document } from "../entity/Document.js";
-import type { CreateFileResponse } from "../types/dto/document.js";
-import { toDocumentDto } from "../types/dto/document.dto.js";
+import type { CreateFileResponse } from "../types/dto/document/document.js";
+import { toDocumentDto } from "../types/dto/document/document.dto.js";
 import { ALLOWED_FILE_TYPES, ALLOWED_FILE_SIZE_MB } from "../types/fileValidParams.js";
 import { HttpError } from "../types/httpError.js";
 
@@ -74,10 +74,10 @@ class FileService extends BaseService<Document> {
 
         const nameCountMap = new Map<string, number>();
         for (const af of allFiles) {
-            if (af.baseName) {
-                const key: string = af.baseName;
-                nameCountMap.set(key, (nameCountMap.get(key) || 0) + 1);
-            }
+            // if (af.baseName) {
+            //     const key: string = af.baseName;
+            //     nameCountMap.set(key, (nameCountMap.get(key) || 0) + 1);
+            // }
         }
 
         files.forEach(f => {
@@ -110,7 +110,7 @@ class FileService extends BaseService<Document> {
         const documents = metadata.map((file) => {
             const doc = new Document();
             doc.name = file.name;
-            doc.baseName = file.basename;
+            // doc.baseName = file.basename;
             doc.size = file.size;
             doc.type = "file";
             doc.createdBy = "Kazushi Fujiwara";

@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-
+import RequestHandler from '../utils/RequestHandler.js';
 export interface AppError extends Error {
   status?: number; // capture status of error
 }
@@ -12,7 +12,6 @@ export const errorHandler = (
 ) => {
   console.error(err);
   // return response when error through next() in controller
-  res.status(err.status || 500).json({ // default to status 500
-    message: err.message || 'Internal Server Error', // default to internal server error
-  });
+  // default to status 500 and internal server error message
+  return RequestHandler.sendError(res, err.message || 'Internal Server Error', err.status || 500);
 };

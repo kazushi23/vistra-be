@@ -1,7 +1,7 @@
 import express from "express";
-import document from "./document.js";
-import file from "./file.js";
-import folder from "./folder.js"
+import document from "./documentApi.js";
+import file from "./fileApi.js";
+import folder from "./folderApi.js"
 
 const router = express.Router();
 

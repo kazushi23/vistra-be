@@ -16,6 +16,15 @@ file(x) all in bu
 
 dont need user table, just a static string first as not requested in assignment
 
+# Actual TODO
+Caching?
+Unique contraints explaination (transactions, results(x).csv, retry)
+Comments
+Typescript enforcing
+Testscripts
+Is logic where it is suppose to be?
+
+
 # CONSIDERATIONS:
 ## DB
 Single document table for easy query for document retrieval unified view

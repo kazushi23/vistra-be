@@ -1,4 +1,4 @@
-import type { DocumentDto } from "./dto/document.dto.ts";
+import type { DocumentDto } from "./dto/document/document.dto.ts";
 
 // base type for all paginated data response
 export interface GetPaginatedDataResponse<T = unknown> {

@@ -1,11 +1,12 @@
-import type { FileDto, FileMetaDataDto } from "../types/dto/document.dto.js";
-import { BaseService } from "./baseService.js";
-import { AppDataSource } from "../data-source.js";
-import { Document } from "../entity/Document.js";
-import type { CreateFileResponse } from "../types/dto/document.js";
-import { toDocumentDto } from "../types/dto/document.dto.js";
-import { ALLOWED_FILE_TYPES, ALLOWED_FILE_SIZE_MB } from "../types/fileValidParams.js";
-import { HttpError } from "../types/httpError.js";
+import type { FileDto, FileMetaDataDto } from "../../types/dto/document/document.dto.js";
+import { BaseService } from "../baseService.js";
+import { AppDataSource } from "../../data-source.js";
+import { Document } from "../../entity/Document.js";
+import type { CreateFileResponse } from "../../types/dto/document/document.js";
+import { toDocumentDto } from "../../types/dto/document/document.dto.js";
+import { ALLOWED_FILE_TYPES, ALLOWED_FILE_SIZE_MB } from "../../types/fileValidParams.js";
+import { HttpError } from "../../types/httpError.js";
+import type { Repository } from "typeorm";
 
 // currently fileservice is stateless, not request specific/user-specific, not multi-tenant, so 1 instance is sufficient
 class FileService extends BaseService<Document> {
@@ -14,10 +15,10 @@ class FileService extends BaseService<Document> {
     private readonly MAX_FILE_SIZE: number; // max allowable filesize in bytes
 
     constructor() {
-        const documentRepository = AppDataSource.getRepository(Document); // extends super class
+        const documentRepository: Repository<Document> = AppDataSource.getRepository(Document); // extends super class
         super(documentRepository); // init
 
-        // declare
+        // declare static variable
         this.ALLOWED_TYPES = ALLOWED_FILE_TYPES;
         this.MAX_FILE_SIZE_MB = ALLOWED_FILE_SIZE_MB;
         this.MAX_FILE_SIZE = this.MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -69,12 +70,11 @@ class FileService extends BaseService<Document> {
 
     async createFiles(files: FileDto): Promise<CreateFileResponse> {
         // validate and extract metadata
-        const metadata = await this.validateExtract(files);
+        const metadata: FileMetaDataDto[] = await this.validateExtract(files);
         // map and create base Document type data
-        const documents = metadata.map((file) => {
+        const documents: Document[] = metadata.map((file) => {
             const doc = new Document();
             doc.name = file.name;
-            doc.baseName = file.basename;
             doc.size = file.size;
             doc.type = "file";
             doc.createdBy = "Kazushi Fujiwara";
