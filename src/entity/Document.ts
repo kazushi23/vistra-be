@@ -4,37 +4,37 @@ import {Entity, Index, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdat
 @Entity()
 export class Document {
     @PrimaryGeneratedColumn()
-    id!: number;
+    id!: number; // 1,2,3,....
 
     @Column({ type: "varchar", length: 255 })
-    name!: string;
+    name!: string; // name of file/folder
 
     @Column({ type: "varchar", length: 255, nullable: true  })
-    baseName?: string;
+    baseName?: string; // for duplication check
 
     @Column({ type: "enum", enum: ["file", "folder"] })
-    type!: "file" | "folder";
+    type!: "file" | "folder"; // type of document {file | folder}
 
     @Column({ type: "bigint", nullable: true })
     size?: number; // only for files (bytes)
 
     @Column({ type: "varchar", length: 100 })
-    createdBy!: string;
+    createdBy!: string; // name of creator (static string for now)
 
     @Column({ type: "bigint" })
-    createdAt!: number;
+    createdAt!: number; // unixmilli utc of creation time
 
     @Column({ type: "bigint" })
-    updatedAt!: number;
+    updatedAt!: number; // unixmilli utc of updated time
 
     @BeforeInsert()
-    setCreatedAt() {
+    setCreatedAt() { // before creation of data, note the time
     const now = Date.now();
         this.createdAt = now;
         this.updatedAt = now;
     }
 
-    @BeforeUpdate()
+    @BeforeUpdate() // before update of data, note the time
     setUpdatedAt() {
         this.updatedAt = Date.now();
     }

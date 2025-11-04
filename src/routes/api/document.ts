@@ -5,5 +5,4 @@ const router = express.Router();
 
 router.get("/", DocumentController.getAllDocuments);// view a list of documents and folders
 
-
 export default router

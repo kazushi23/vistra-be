@@ -5,6 +5,7 @@ import folder from "./folder.js"
 
 const router = express.Router();
 
+// base api route for different types
 router.use("/document", document);
 router.use("/file", file);
 router.use("/folder", folder);

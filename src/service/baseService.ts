@@ -1,9 +1,10 @@
 import type { Repository, ObjectLiteral } from "typeorm";
 import type { GetAllQueryOptions } from "../types/base.js";
 
+// resuable logic for service layer, get data with pagination, get data with where clause, create single, create batch
 export abstract class BaseService<T extends ObjectLiteral> {
     protected repository: Repository<T>; // from subclass, utilise the Repository
-    private defaultLimit = 10;
+    private defaultLimit = 10; // default pagesize if null
 
     constructor(repository: Repository<T>) {
         this.repository = repository;
@@ -14,8 +15,7 @@ export abstract class BaseService<T extends ObjectLiteral> {
             const result = await this.repository.save(value);
             return result;
         } catch (error) {
-            console.error("Error creating record:", error);
-            throw new Error("Database error: unable to create record");
+            throw new Error("Database error: unable to create record"); // 500 response
         }
     }
     // create batch
@@ -25,15 +25,14 @@ export abstract class BaseService<T extends ObjectLiteral> {
             const result = await this.repository.save(values);
             return result;
         } catch (error) {
-            console.error("Error creating record:", error);
-            throw new Error("Database error: unable to create batch records");
+            throw new Error("Database error: unable to create batch records"); // 500 response
         }
     }
     // get all data with pagination, sorting, filtering and searching
     async getAllPagination(options: GetAllQueryOptions = {}): Promise<{data: T[]; total: number;}> {
-        const page = options.page && options.page > 0 ? options.page : 1;
-        const pageSize = options.pageSize && options.pageSize > 0 ? options.pageSize : this.defaultLimit;
-        const offset = (page - 1) * pageSize;
+        const page = options.page && options.page > 0 ? options.page : 1; // default to page 1
+        const pageSize = options.pageSize && options.pageSize > 0 ? options.pageSize : this.defaultLimit; // default to defaultLimit
+        const offset = (page - 1) * pageSize; // start from which record
 
         // t alias for the table
         const qb = this.repository.createQueryBuilder("t");
@@ -76,18 +75,19 @@ export abstract class BaseService<T extends ObjectLiteral> {
         };
     }
 
+    // get all data with where clause
     async getAllFiltered(options: GetAllQueryOptions = {}): Promise<T[]> {
         // t alias for the table
         const qb = this.repository.createQueryBuilder("t");
 
-        // Apply filters
+        // Apply filters {name: "kazushi"}
         if (options.filters) {
             Object.entries(options.filters).forEach(([key, value]) => {
-            if (Array.isArray(value)) {
+            if (Array.isArray(value)) { // if val array {name: ["x", "y"...]}
                 qb.andWhere(`t.${key} IN (:...${key})`, { [key]: value });
-            } else if (value === null) {
+            } else if (value === null) { // if val null {name: null}
                 qb.andWhere(`t.${key} IS NULL`);
-            } else {
+            } else { // if val single {name: "kazushi"}
                 qb.andWhere(`t.${key} = :${key}`, { [key]: value });
             }
             });

@@ -7,5 +7,4 @@ const router = express.Router();
 
 router.post("/create", upload.array("files"), FileController.createFile); // create file
 
-
 export default router

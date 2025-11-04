@@ -1,20 +1,23 @@
 import type { Document } from "typeorm";
 import 'express';
 
+// request type for file creation
 export interface FileDto {
   files: Express.Multer.File[]
 }
-
+// type for file mapping after extracting file metadata
 export interface FileMetaDataDto {
   basename: string;
   name: string;
   size: number;
 }
 
+// request type for folder creation
 export interface FolderDto {
   name: string;
 }
 
+// response type for document data
 export interface DocumentDto {
   id: number;
   name: string;
@@ -24,6 +27,7 @@ export interface DocumentDto {
   type: "file" | "folder";
 }
 
+// map entity to dto for removal of unneeded data
 export function toDocumentDto(document: Document): DocumentDto {
   return {
     id: Number(document.id),
