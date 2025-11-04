@@ -24,6 +24,11 @@ Typescript enforcing
 Testscripts
 Is logic where it is suppose to be?
 
+# Test:
+npm i
+ensure all data in mysql is dropped
+
+
 
 # CONSIDERATIONS:
 ## DB

@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 // load env based on runtime environment
-const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development";
+const envFile = process.env.NODE_ENV === "production" ? ".env.production" : process.env.NODE_ENV === "test" ? ".env.test" : ".env.development";
 dotenv.config({ path: envFile });
 
 interface Config {

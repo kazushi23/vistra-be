@@ -1,10 +1,6 @@
 import { DataSource } from "typeorm";
 import config from "./config/config.js";
-import { fileURLToPath } from "url";
-import path from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { Document } from "./entity/Document.js";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -16,7 +12,7 @@ export const AppDataSource = new DataSource({
     timezone: "Z",
     synchronize: true,
     logging: true,
-    entities: [__dirname + "/entity/*.ts"],
+    entities: [Document],
     subscribers: [],
     migrations: [],
 })

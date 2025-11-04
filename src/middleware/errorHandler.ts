@@ -10,7 +10,6 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  console.error(err);
   // return response when error through next() in controller
   // default to status 500 and internal server error message
   return RequestHandler.sendError(res, err.message || 'Internal Server Error', err.status || 500);

@@ -8,13 +8,14 @@ export class FolderController {
     // creation of folder in db
     static async createFolder(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const name = req.body as FolderDto; // retrieve from request body
-            // if "" or null, respond error bad request
-            if (!name) {
+            const folderDto = req.body as FolderDto; // destructure name
+
+            // Validate folder name
+            if (!folderDto.name || folderDto.name.trim() === "") {
                 return RequestHandler.sendError(res, "Folder name is required", 400);
             }
             // pass to service layer
-            const result = await folderService.createFolder(name);
+            const result = await folderService.createFolder(folderDto);
             // if something went wrong, respond 400
             if (!result.success) {
                 return RequestHandler.sendError(res, result.message);
