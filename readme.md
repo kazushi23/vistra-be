@@ -24,11 +24,34 @@ Typescript enforcing
 Testscripts
 Is logic where it is suppose to be?
 
-# Test:
+# Run development environment
 npm i
-ensure all data in mysql is dropped
+npm run dev
 
+# Run production environment
+npm i
+npm run build
+npm run start
 
+# Run test:
+npm i
+ensure all data in mysql is dropped before running test
+npm run test
+
+ PASS  test/index.test.ts
+  Documents API
+    ✓ should return empty document list initially (31 ms)
+    ✓ should create a folder successfully (32 ms)
+    ✓ should create a file successfully (12 ms)
+    ✓ should fail for invalid file name (3 ms)
+    ✓ should fail for invalid file type (.json) (4 ms)
+    ✓ should fail when no file is provided (2 ms)
+    ✓ should fail when file is empty (2 ms)
+    ✓ should fail when more than 10 files are uploaded (4 ms)
+    ✓ should return a list with folders and files (10 ms)
+    ✓ should return error for invalid page (2 ms)
+    ✓ should fail when folder body is missing (2 ms)
+    ✓ should fail when folder name is missing (2 ms)
 
 # CONSIDERATIONS:
 ## DB
