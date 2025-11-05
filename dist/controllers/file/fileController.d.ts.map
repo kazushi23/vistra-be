@@ -1,1 +1,0 @@
-{"version":3,"file":"fileController.d.ts","sourceRoot":"","sources":["../../../src/controllers/file/fileController.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,YAAY,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAQ/D,qBAAa,cAAc;WACV,UAAU,CAAC,GAAG,EAAE,OAAO,EAAE,GAAG,EAAE,QAAQ,EAAE,IAAI,EAAE,YAAY,GAAG,OAAO,CAAC,IAAI,CAAC;CA2B1F"}
