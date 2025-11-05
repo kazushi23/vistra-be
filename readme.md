@@ -236,7 +236,9 @@ url?: string;
 baseName?: string;  // Original filename before (1), (2), etc.
 ```
 
-Extending to separate File and Folder column is feasible as well if each has way more independant columns. Or even adding a version history table with relationship to document works.
+Extending to separate File and Folder table is feasible as well if each has way more independent columns.\
+Or even adding a version history table with relationship to document works.
+
 ---
 
 ## Unique Constraints & Duplicate Handling
@@ -257,10 +259,9 @@ Extending to separate File and Folder column is feasible as well if each has way
 - Folder: Rejected if exist for user (e.g., "Report" by user A will clash when user A create "Report")
 - Files: Automatically renamed to avoid conflicts (e.g., "report.pdf" → "report(1).pdf")
 
-If unique constraints are needed:
 
 
-## Separate BaseName Column for Files (Production-Ready)
+## If unique constraints are needed: Separate BaseName Column for Files
 Use case: Track duplicate files while allowing multiple versions\
 This approach adds a baseName column to store the original filename, while name stores the final unique name with counters.\
 Database Schema:
