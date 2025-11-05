@@ -439,7 +439,7 @@ throw new HttpError("File too large", 400);
 - [ ] Duplicate check and reject for folders
 - [ ] Duplicate check and versioning for files (report(1).pdf)
 - [ ] Self-referencing parent-child relationships (folder-sub folder)
-- [ ] Self-referencing parent-child relationships (folder-files)
+- [ ] One to Many relationships (folder-files)
 - [ ] AWS S3 integration for file uploads
 - [ ] Sharing & permissions
 
