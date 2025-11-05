@@ -39,3 +39,5 @@ Thumbs.db
 .npm/ # Optional npm cache directory
 .eslintcache # Optional eslint cache
 .history/ # VS Code local history
+
+dist

@@ -12,8 +12,6 @@ import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } fr
 let Document = class Document {
     id; // 1,2,3,....
     name; // name of file/folder
-    // @Column({ type: "varchar", length: 255, nullable: true  })
-    // baseName?: string; // for duplication check
     type; // type of document {file | folder}
     size; // only for files (bytes)
     createdBy; // name of creator (static string for now)

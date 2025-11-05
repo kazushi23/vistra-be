@@ -40,12 +40,14 @@ DB_DATABASE=vistra
 
 #### Development Mode
 ```bash
+# ensure .env.development has been created (reference above)
 npm run dev
 ```
 Server runs on `http://localhost:5001` with hot-reload enabled.
 
 #### Production Mode
 ```bash
+# ensure .env.production has been created (reference above)
 # Build TypeScript to JavaScript
 npm run build
 
@@ -55,6 +57,7 @@ npm start
 
 #### Testing
 ```bash
+# ensure .env.test has been created (reference above)
 # IMPORTANT: Clear database before running tests
 # Tests will create and manipulate data
 
@@ -123,6 +126,7 @@ gep-fe/
 │   ├── fileValidParam.ts    # Static options allowed file types, size and length
 │   └── httpError.ts         # Custom Error with status code
 ├── utils/
+│   ├── logger.ts              # Server Logging
 │   └── RequestHandler.ts      # Custom SendSuccess and SendError response object
 ├── app.ts              # Server entry point
 ├── data-source.ts      # DB initialisation point
@@ -132,7 +136,29 @@ gep-fe/
 ```
 ---
 ## Features
+### Logging - with rotation
+```typescript
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    const start = Date.now();
 
+    res.on("finish", () => {
+      const duration = Date.now() - start;
+      logger.info(`${req.method} ${req.originalUrl} ${res.statusCode} - ${duration}ms`);
+    });
+
+    next();
+  });
+```
+```log
+2025-11-05 10:20:10 [info] : GET /api/v1/document?page=1&pagesize=10&descending=true&sortColumn=updatedAt&search= 304 - 13ms
+2025-11-05 10:20:11 [info] : GET /api/v1/document?page=1&pagesize=10&descending=true&sortColumn=updatedAt&search= 304 - 2ms
+2025-11-05 10:20:19 [info] : GET /api/v1/document?page=1&pagesize=10&descending=true&sortColumn=updatedAt&search= 304 - 8ms
+2025-11-05 10:20:19 [info] : GET /api/v1/document?page=1&pagesize=10&descending=true&sortColumn=updatedAt&search= 304 - 3ms
+2025-11-05 10:20:31 [info] : POST /api/v1/folder/create 200 - 12ms
+2025-11-05 10:20:31 [info] : GET /api/v1/document?page=1&pagesize=10&descending=true&sortColumn=updatedAt&search= 200 - 3ms
+2025-11-05 10:20:56 [info] : POST /api/v1/file/create 200 - 12ms
+2025-11-05 10:20:56 [info] : GET /api/v1/document?page=1&pagesize=10&descending=true&sortColumn=updatedAt&search= 200 - 2ms
+```
 ### Current Implementation
 - **View a list of documents and folders**: Implementation mainly in DocumentController and DocumentService
 - **Add a new folder**: Implementation mainly in folderService

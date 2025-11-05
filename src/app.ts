@@ -3,6 +3,8 @@ import express from "express";
 import cors from "cors";
 import router from "./routes/index.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import logger from "./utils/logger.js";
+import { Request, Response, NextFunction } from "express";
 
 export function createApp() {
   const app = express();
@@ -19,8 +21,20 @@ export function createApp() {
     })
   );
 
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    const start = Date.now();
+
+    res.on("finish", () => {
+      const duration = Date.now() - start;
+      logger.info(`${req.method} ${req.originalUrl} ${res.statusCode} - ${duration}ms`);
+    });
+
+    next();
+  });
+
   app.use(router);
   app.use(errorHandler);
+
 
   return app;
 }
