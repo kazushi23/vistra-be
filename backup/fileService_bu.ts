@@ -1,11 +1,11 @@
-import type { FileDto, FileMetaDataDto } from "../types/dto/document/document.dto.js";
-import { BaseService } from "./baseService.js";
-import { AppDataSource } from "../data-source.js";
-import { Document } from "../entity/Document.js";
-import type { CreateFileResponse } from "../types/dto/document/document.js";
-import { toDocumentDto } from "../types/dto/document/document.dto.js";
-import { ALLOWED_FILE_TYPES, ALLOWED_FILE_SIZE_MB } from "../types/fileValidParams.js";
-import { HttpError } from "../types/httpError.js";
+import type { FileDto, FileMetaDataDto } from "../src/types/dto/document/document.dto.js";
+import { BaseService } from "../src/service/baseService.js";
+import { AppDataSource } from "../src/data-source.js";
+import { Document } from "../src/entity/Document.js";
+import type { CreateFileResponse } from "../src/types/dto/document/document.js";
+import { toDocumentDto } from "../src/types/dto/document/document.dto.js";
+import { ALLOWED_FILE_TYPES, ALLOWED_FILE_SIZE_MB } from "../src/types/fileValidParams.js";
+import { HttpError } from "../src/types/httpError.js";
 import type { QueryRunner } from "typeorm";
 
 class FileService extends BaseService<Document> {

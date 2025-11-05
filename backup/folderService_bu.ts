@@ -1,9 +1,9 @@
-import { BaseService } from "./baseService.js";
-import { AppDataSource } from "../data-source.js";
-import { Document } from "../entity/Document.js";
-import { type FolderDto, toDocumentDto } from "../types/dto/document/document.dto.js";
-import type { CreateFolderResponse } from "../types/dto/document/document.js";
-import { HttpError } from "../types/httpError.js";
+import { BaseService } from "../src/service/baseService.js";
+import { AppDataSource } from "../src/data-source.js";
+import { Document } from "../src/entity/Document.js";
+import { type FolderDto, toDocumentDto } from "../src/types/dto/document/document.dto.js";
+import type { CreateFolderResponse } from "../src/types/dto/document/document.js";
+import { HttpError } from "../src/types/httpError.js";
 
 // currently folderservice is stateless, not request specific/user-specific, not multi-tenant, so 1 instance is sufficient
 class FolderService extends BaseService<Document> {

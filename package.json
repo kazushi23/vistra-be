@@ -5,11 +5,11 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon --watch src --ext ts --exec \"node --loader ts-node/esm src/index.ts\"",
-    "build": "NODE_ENV=production tsc",
-    "start": "NODE_ENV=production node dist/index.js",
-    "test": " NODE_ENV=test jest",
-    "test:watch": "NODE_ENV=test jest --watch"
+    "dev": "cross-env NODE_ENV=development nodemon --watch src --ext ts --exec \"node --loader ts-node/esm src/index.ts\"",
+    "build": "cross-env NODE_ENV=production tsc",
+    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "test": "cross-env NODE_ENV=test jest",
+    "test:watch": "cross-env NODE_ENV=test jest --watch"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +32,7 @@
     "@types/multer": "^2.0.0",
     "@types/node": "^24.9.2",
     "@types/supertest": "^6.0.3",
+    "cross-env": "^10.1.0",
     "jest": "^30.2.0",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.4",
