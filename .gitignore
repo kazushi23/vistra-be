@@ -40,4 +40,4 @@ Thumbs.db
 .eslintcache # Optional eslint cache
 .history/ # VS Code local history
 
-dist
+dist/
