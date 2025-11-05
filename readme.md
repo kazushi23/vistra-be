@@ -82,7 +82,8 @@ npm run test:watch
 ### Files
 - `POST /api/v1/file/create` - Upload files (max 10 per request)
   - Form-data: `files` (multipart/form-data)
-  - Allowed File Types: PDF, DOC, DOCX, XLS, XLSX, TXT, CSV, RTF, PNG, JPG, JPEG, GIF, WEBP, SVG, ZIP, 7Z (can be changed based on scope).  - Max size: 5MB per file
+  - Allowed File Types: PDF, DOC, DOCX, XLS, XLSX, TXT, CSV, RTF, PNG, JPG, JPEG, GIF, WEBP, SVG, ZIP, 7Z (can be changed based on scope).  
+  - Max size: 5MB per file
   - Max length: 10 files
 
 ## Project Structure
@@ -168,7 +169,7 @@ gep-fe/
 - **Sorting**: Implementation mainly in DocumentController, DocumentService and BaseService
 
 ### File Upload Validation
-- **Allowed Types**: PDF, DOCX, XLSX, PNG, JPG, JPEG
+- **Allowed Types**: PDF, DOC, DOCX, XLS, XLSX, TXT, CSV, RTF, PNG, JPG, JPEG, GIF, WEBP, SVG, ZIP, 7Z (can be changed based on scope)
 - **Max File Size**: 5MB per file
 - **Max Files**: 10 files per upload
 - **Empty File Detection**: Rejects 0-byte files
