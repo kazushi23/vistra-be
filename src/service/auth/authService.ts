@@ -37,8 +37,9 @@ export class AuthService extends BaseService<User> {
 
     async signup(): Promise<SignupResponse> {
         const user = new User();
-        user.name = "kazushi";
-        user.email = "kazushit8@gmail.com";
+        const randNum = Math.floor(Math.random() * 10000)
+        user.name = `Kazushi ${String(randNum)}`;
+        user.email = `kazushit${String(randNum)}@gmail.com`;
         user.password = await bcrypt.hash("Proteus@2025", 10);
         const res = await this.createOne(user)
         
