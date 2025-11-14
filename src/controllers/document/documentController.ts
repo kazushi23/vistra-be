@@ -28,7 +28,7 @@ export class DocumentController {
             const result: GetDocumentsResponse = await documentService.getAllDocuments({page, pageSize, offset, descending, sortBy, search});
 
             // Return response
-            return RequestHandler.sendSuccess(res, "Data has been retrieved", result.total)(result.data);
+            return RequestHandler.sendSuccess(res, result.message, result.total)(result.data);
 
         } catch (error) {
             // pass to middleware errorhandler

@@ -1,10 +1,10 @@
 import type { Document } from "typeorm";
 import 'express';
+import * as z from "zod";
+import { FileSchema } from "../../../schemas/document.schema.js";
 
 // request type for file creation
-export interface FileDto {
-  files: Express.Multer.File[]
-}
+export type FileDto = z.infer<typeof FileSchema>
 // type for file mapping after extracting file metadata
 export interface FileMetaDataDto {
   basename: string;

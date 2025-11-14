@@ -1,4 +1,5 @@
-import {Entity, Index, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from "typeorm";
+import {Entity, Index, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, ManyToOne, JoinColumn } from "typeorm";
+import { User } from "./User.js";
 
 // @Index("unique_name", ["name"], { unique: true })
 @Entity()
@@ -35,4 +36,11 @@ export class Document {
     setUpdatedAt() {
         this.updatedAt = Date.now();
     }
+
+    @ManyToOne(() => User, user => user.document)
+    @JoinColumn({name: "userId"})
+    user!: User
+
+    @Column()
+    userId!: number;
 }

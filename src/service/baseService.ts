@@ -28,6 +28,7 @@ export abstract class BaseService<T extends ObjectLiteral> {
             throw new Error("Database error: unable to create batch records"); // 500 response
         }
     }
+
     // get all data with pagination, sorting, filtering and searching
     async getAllPagination(options: GetAllQueryOptions = {}): Promise<{data: T[]; total: number;}> {
         const page = options.page && options.page > 0 ? options.page : 1; // default to page 1

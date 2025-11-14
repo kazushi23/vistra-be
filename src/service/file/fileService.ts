@@ -7,6 +7,7 @@ import { toDocumentDto } from "../../types/dto/document/document.dto.js";
 import { ALLOWED_FILE_TYPES, ALLOWED_FILE_SIZE_MB } from "../../types/fileValidParams.js";
 import { HttpError } from "../../types/httpError.js";
 import type { Repository } from "typeorm";
+import { User } from "../../entity/User.js";
 
 // currently fileservice is stateless, not request specific/user-specific, not multi-tenant, so 1 instance is sufficient
 class FileService extends BaseService<Document> {
@@ -27,36 +28,36 @@ class FileService extends BaseService<Document> {
     // to validate all files and extract metadata {name, size}
     async validateExtract(fileDto: FileDto): Promise<FileMetaDataDto[]> {
         // if no files, throw error bad request
-        if (!fileDto?.files || fileDto.files.length === 0) {
-            throw new HttpError("No files provided for validation.", 400);
-        }
+        // if (!fileDto?.files || fileDto.files.length === 0) {
+        //     throw new HttpError("No files provided for validation.", 400);
+        // }
         // init file metadata array
         const fileMetaData: FileMetaDataDto[] = []
 
         for (const file of fileDto.files) { // loop through files
-            // if file missing or have issues, throw error bad request
-            if (!file) throw new HttpError("File is missing or undefined.", 400);
+            // // if file missing or have issues, throw error bad request
+            // if (!file) throw new HttpError("File is missing or undefined.", 400);
 
-            // check if file is within allowable types, else throw error bad request
-            if (!this.ALLOWED_TYPES.includes(file.mimetype)) {
-                throw new HttpError(`Invalid file type: ${file.originalname} (${file.mimetype})`, 400);
-            }
+            // // check if file is within allowable types, else throw error bad request
+            // if (!this.ALLOWED_TYPES.includes(file.mimetype)) {
+            //     throw new HttpError(`Invalid file type: ${file.originalname} (${file.mimetype})`, 400);
+            // }
 
-            // check if file is within allowable file size (bytes), else throw error bad request
-            if (file.size  > this.MAX_FILE_SIZE) {
-                throw new HttpError(
-                `File "${file.originalname}" exceeds the maximum size of ${this.MAX_FILE_SIZE_MB}MB`,
-                400
-                );
-            }
-            // if files is an empty file, throw error bad request
-            if (file.size === 0) {
-                throw new HttpError(`File "${file.originalname}" is empty.`, 400);
-            }
-            // check if file name is valida, else throw error bad request
-            if (!/^[a-zA-Z0-9._\-\s()]+$/.test(file.originalname)) {
-                throw new HttpError(`File name "${file.originalname}" contains invalid characters.`, 400);
-            }
+            // // check if file is within allowable file size (bytes), else throw error bad request
+            // if (file.size  > this.MAX_FILE_SIZE) {
+            //     throw new HttpError(
+            //     `File "${file.originalname}" exceeds the maximum size of ${this.MAX_FILE_SIZE_MB}MB`,
+            //     400
+            //     );
+            // }
+            // // if files is an empty file, throw error bad request
+            // if (file.size === 0) {
+            //     throw new HttpError(`File "${file.originalname}" is empty.`, 400);
+            // }
+            // // check if file name is valida, else throw error bad request
+            // if (!/^[a-zA-Z0-9._\-\s()]+$/.test(file.originalname)) {
+            //     throw new HttpError(`File name "${file.originalname}" contains invalid characters.`, 400);
+            // }
             // append metadata and return
             fileMetaData.push({
                 name: file.originalname,
@@ -68,7 +69,7 @@ class FileService extends BaseService<Document> {
         return fileMetaData;
     }
 
-    async createFiles(files: FileDto): Promise<CreateFileResponse> {
+    async createFiles(files: FileDto, user: User): Promise<CreateFileResponse> {
         // validate and extract metadata
         const metadata: FileMetaDataDto[] = await this.validateExtract(files);
         // map and create base Document type data
@@ -77,7 +78,8 @@ class FileService extends BaseService<Document> {
             doc.name = file.name;
             doc.size = file.size;
             doc.type = "file";
-            doc.createdBy = "Kazushi Fujiwara";
+            doc.createdBy = user.name;
+            doc.user = user;
             return doc;
         });
         // batch create

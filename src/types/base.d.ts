@@ -1,5 +1,7 @@
+import { User } from "../entity/User.ts";
 import type { DocumentDto } from "./dto/document/document.dto.ts";
-
+import { UserDto } from "./dto/user/user.dto.ts";
+import { Request } from "express";
 // base type for all paginated data response
 export interface GetPaginatedDataResponse<T = unknown> {
   success: boolean;
@@ -30,4 +32,12 @@ export interface GetAllQueryOptions {
     search?: string; // search string
     searchColumns?: string[]; // which columns to search in
     filters?: Record<string, any>;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User
+    }
+  }
 }

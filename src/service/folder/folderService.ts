@@ -4,6 +4,7 @@ import { Document } from "../../entity/Document.js";
 import { type FolderDto, toDocumentDto } from "../../types/dto/document/document.dto.js";
 import type { CreateFolderResponse } from "../../types/dto/document/document.js";
 import { HttpError } from "../../types/httpError.js";
+import { User } from "../../entity/User.js";
 
 // currently folderservice is stateless, not request specific/user-specific, not multi-tenant, so 1 instance is sufficient
 class FolderService extends BaseService<Document> {
@@ -12,12 +13,13 @@ class FolderService extends BaseService<Document> {
         super(documentRepository); // init
     }
     // for creation of folder
-    async createFolder(folder: FolderDto): Promise<CreateFolderResponse> {
+    async createFolder(folder: FolderDto, user: User): Promise<CreateFolderResponse> {
         // create base Document type data
         const document = new Document();
         document.name = folder.name;
         document.type = "folder";
-        document.createdBy = "Kazushi Fujiwara";
+        document.createdBy = user.name;
+        document.user = user;
 
         const created = await this.repository.save(document); // single create operation
 

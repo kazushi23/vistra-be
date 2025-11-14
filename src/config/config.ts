@@ -10,6 +10,8 @@ interface Config {
     db_username: string; // db username string
     db_password: string; // db password string
     db_database: string; // db schema name
+    jwt_secret: string; // jwt secret
+    jwt_expires_in: number; // jwt expires in
 }
 
 const config: Config = { // export for use in code base
@@ -18,7 +20,9 @@ const config: Config = { // export for use in code base
     db_port: Number(process.env.DB_PORT) || 3306, // default mysql port
     db_username: String(process.env.DB_USERNAME) || "root",
     db_password: String(process.env.DB_PASSWORD) || "",
-    db_database: String(process.env.DB_DATABASE) || ""
+    db_database: String(process.env.DB_DATABASE) || "",
+    jwt_secret: String(process.env.JWT_SECRET) || "givemeyoursecret",
+    jwt_expires_in: Number(process.env.JWT_EXPIRES_IN) || 86400
 }
 
 export default config;

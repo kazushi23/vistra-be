@@ -1,6 +1,7 @@
 import { DataSource } from "typeorm";
 import config from "./config/config.js";
 import { Document } from "./entity/Document.js";
+import { User } from "./entity/User.js";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -12,7 +13,7 @@ export const AppDataSource = new DataSource({
     timezone: "Z",
     synchronize: true,
     logging: true,
-    entities: [Document],
+    entities: [Document, User],
     subscribers: [],
     migrations: [],
 })
