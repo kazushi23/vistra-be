@@ -1,0 +1,35 @@
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
+  createdAt: Float!
+  updatedAt: Float!
+}
+
+input UserFilter {
+  search: String
+}
+
+input UserSort {
+  field: String!
+  order: String! # "asc" | "desc"
+}
+
+type UserPaginationResult {
+  data: [User!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+extend type Query {
+  users(
+    page: Int = 1
+    limit: Int = 10
+    filter: UserFilter
+    sort: UserSort
+  ): UserPaginationResult!
+
+  user(id: ID!): User
+}

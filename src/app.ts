@@ -6,7 +6,7 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import logger from "./utils/logger.js";
 import { Request, Response, NextFunction } from "express";
 import { ApolloServer } from "@apollo/server";
-import typeDefs from "./schemas/index.js";
+import typeDefs from "./schemas/graphql/index.js";
 import resolvers from "./resolvers/index.js";
 import { expressMiddleware } from "@as-integrations/express5";
 
